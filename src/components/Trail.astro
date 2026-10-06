@@ -1,0 +1,65 @@
+---
+// The lifecycle as a trail of drawn stages: solid for done, dashed for ahead.
+// Horizontal on wide screens, vertical on phones. The last stop is highlighted.
+// Pass `current` (0-based) to show a team's progress, e.g. on a Passport.
+import Icon from './Icon.astro';
+import type { IconName } from '../lib/icons';
+
+interface Props {
+  stages: { icon: IconName; title: string; note?: string }[];
+  current?: number;
+}
+const { stages, current } = Astro.props;
+const state = (i: number) => (current === undefined ? '' : i < current ? 'done' : i === current ? 'now' : '');
+---
+
+<ol class="trail">
+  {stages.map((s, i) => (
+    <li class:list={[state(i), { last: i === stages.length - 1 }]}>
+      <span class="dot"><Icon name={s.icon} size={28} stroke={1.6} /></span>
+      <span class="text">
+        <b>{s.title}</b>
+        {s.note && <span class="note">{s.note}</span>}
+      </span>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .trail {
+    --d: 64px;
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr);
+  }
+  li { position: relative; display: grid; grid-template-columns: var(--d) minmax(0, 1fr); gap: 16px; align-items: center; }
+  .dot {
+    width: var(--d); height: var(--d); border-radius: 50%;
+    display: grid; place-items: center;
+    border: var(--line) solid var(--ink); background: var(--paper); color: var(--ink);
+    position: relative; z-index: 1;
+  }
+  .last .dot { background: var(--beak); border-color: var(--beak); color: var(--on-beak); }
+  .done .dot { background: var(--sea); border-color: var(--sea); color: var(--paper); }
+  .now .dot { background: var(--ink); color: var(--paper); }
+  .text { display: grid; gap: 0; min-width: 0; }
+  b { font-family: var(--f-hand); font-variation-settings: var(--infm-head); font-weight: 600; font-size: 1.3rem; line-height: 1.2; }
+  .note { font-size: var(--t-small); color: var(--ink-2); }
+
+  /* connectors */
+  li + li::before {
+    content: ""; position: absolute; left: calc(var(--d) / 2 - 1px); bottom: 100%; height: 28px;
+    border-left: 2px dashed var(--ink-2);
+  }
+  li.done + li::before { border-left-style: solid; border-color: var(--sea); }
+
+  @media (min-width: 760px) {
+    .trail { grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr)); gap: 0; }
+    li { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; gap: 14px; align-content: start; }
+    li + li::before {
+      bottom: auto; top: calc(var(--d) / 2 - 1px); height: 0;
+      left: calc(-50% + var(--d) / 2 + 8px); width: calc(100% - var(--d) - 16px);
+      border-left: 0; border-top: 2px dashed var(--ink-2);
+    }
+    li.done + li::before { border-top-style: solid; border-color: var(--sea); }
+  }
+</style>

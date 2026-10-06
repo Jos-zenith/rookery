@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import SectionHead from '../components/SectionHead.astro';
+import MarginNote from '../components/MarginNote.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+const applyOpen = Boolean(site.applyFormUrl);
+
+const steps = [
+  { title: 'Fill in the application', body: 'A short Google Form. No experience needed, any college.' },
+  { title: 'Join the WhatsApp Community', body: 'Finish onboarding and you’re a Starter (L0): you get your track group and the resource library.' },
+  { title: 'Do the guided mini design sprint', body: 'Interview 3 people, frame one problem, sketch one idea. That makes you a Learner (L1).' },
+  { title: 'Get your huddle', body: 'A team of 4–5 penguins and a real project, with a Guide to help.' },
+];
+---
+
+<Base title="Apply" description="Apply for the first batch of The Rookery: 25–30 students, all online, from any college.">
+  <section class="page apply">
+    <div class="with-margin">
+      <div class="intro">
+        <SectionHead eyebrow={`First batch · ${site.batch.size} penguins`} title="Come build with us" />
+        <div class="prose">
+          <p>
+            You don’t need to know anything to start. You need about {site.batch.hoursPerWeek} hours a week, and to show
+            up for your huddle.
+          </p>
+        </div>
+        <div class="cta">
+          {applyOpen ? (
+            <Button href={site.applyFormUrl} external>Open the application form</Button>
+          ) : (
+            <div class="closed">
+              <Icon name="egg" size={28} stroke={1.6} />
+              <p>
+                <strong>Applications open soon.</strong>
+                <span class="muted"> The first batch is being set up now. Check back here, or ask the person who shared this link.</span>
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+      <MarginNote>Start small. You can figure out the rest with your huddle.</MarginNote>
+    </div>
+
+    <h2 class="steps-title">What happens after you apply</h2>
+    <ol class="steps">
+      {steps.map((s, i) => (
+        <li>
+          <span class="n">{i + 1}</span>
+          <div>
+            <h3>{s.title}</h3>
+            <p class="muted">{s.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <h2 class="steps-title">What we ask of you</h2>
+    <ul class="ask">
+      <li><Icon name="clock" size={22} /> About {site.batch.hoursPerWeek} hours a week: project work, the Wednesday session and the Saturday huddle call.</li>
+      <li><Icon name="huddle" size={22} /> Show up for your huddle. They’re counting on you.</li>
+      <li><Icon name="chat" size={22} /> A Monday check-in on WhatsApp: what you did, what’s next, where you’re stuck.</li>
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .apply { padding-block: 56px 0; }
+  .intro { display: grid; gap: 4px; }
+  .cta { margin-top: 24px; }
+  .closed {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 18px 20px; border: 1.5px dashed var(--pebble); border-radius: var(--r-m);
+    max-width: 56ch;
+  }
+  .steps-title { margin-top: 64px; font-size: 1.6rem; }
+  .steps {
+    list-style: none; margin: 22px 0 0; padding: 0;
+    border-left: 2px dashed var(--ink-2); margin-left: 15px;
+    display: grid; gap: 26px; max-width: var(--col);
+  }
+  .steps li { position: relative; padding-left: 32px; }
+  .n {
+    position: absolute; left: -16px; top: -2px;
+    width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--paper); border: 2px solid var(--ink);
+    font-family: var(--f-mono); font-size: 0.85rem; font-weight: 600;
+  }
+  .steps li:first-child .n { background: var(--ink); color: var(--paper); }
+  .steps div { display: grid; gap: 4px; }
+  .ask { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 14px; max-width: var(--col); }
+  .ask li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 14px; align-items: start; }
+  .ask :global(.icon) { margin-top: 3px; color: var(--sea); }
+</style>

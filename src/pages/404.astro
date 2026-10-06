@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import Button from '../components/Button.astro';
+---
+
+<Base title="Page not found">
+  <section class="page lost">
+    <div class="mark"><Logo variant="penguin" label="A line-drawn penguin" /></div>
+    <h1>This trail doesn’t go anywhere.</h1>
+    <p class="muted">The page you were looking for isn’t here. It may have moved, or the link may have a typo.</p>
+    <Button href="/" icon="arrow-right">Back to The Rookery</Button>
+  </section>
+</Base>
+
+<style>
+  .lost { padding-block: 72px 0; display: grid; gap: 18px; justify-items: start; max-width: var(--col); }
+  .mark { width: 120px; color: var(--ink); }
+</style>

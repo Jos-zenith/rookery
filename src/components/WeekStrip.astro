@@ -1,0 +1,42 @@
+---
+// Seven days, same rhythm every week. Empty days stay visible on wide
+// screens to show how light the week is; phones show only the busy days.
+import Icon from './Icon.astro';
+import type { IconName } from '../lib/icons';
+
+interface Props {
+  days: { day: string; icon?: IconName; what?: string }[];
+}
+const { days } = Astro.props;
+---
+
+<ol class="week">
+  {days.map((d) => (
+    <li class:list={['day', { empty: !d.what }]}>
+      <span class="label name">{d.day}</span>
+      {d.icon && <Icon name={d.icon} size={28} stroke={1.6} />}
+      {d.what && <span class="what">{d.what}</span>}
+    </li>
+  ))}
+</ol>
+
+<style>
+  .week {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
+  }
+  .day {
+    border-top: var(--line) solid var(--ink);
+    padding-top: 12px;
+    display: grid; gap: 10px; align-content: start; justify-items: start;
+  }
+  .name { color: var(--ink); font-weight: 600; }
+  .what { font-weight: 600; font-size: var(--t-small); line-height: 1.3; }
+  .empty { display: none; }
+
+  @media (min-width: 820px) {
+    .week { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+    .empty { display: grid; border-top: 1px dashed var(--pebble); }
+    .empty .name { color: var(--ink-2); font-weight: 400; }
+  }
+</style>

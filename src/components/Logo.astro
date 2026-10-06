@@ -1,0 +1,58 @@
+---
+// The hand-drawn logo, inlined so it takes the current text colour
+// (ink by day, cream at night). Never retype the wordmark in a font.
+import { logoPaths, logoViewBox } from '../lib/logo-paths';
+
+type Variant = 'full' | 'mark' | 'word' | 'penguin';
+type Part = keyof typeof logoPaths;
+
+interface Props {
+  variant?: Variant;
+  label?: string;
+  /** Draw the trail in once on load (the site's one signature animation). */
+  drawTrail?: boolean;
+  class?: string;
+}
+
+const { variant = 'full', label = 'The Rookery', drawTrail = false, class: className } = Astro.props;
+
+const parts: Record<Variant, Part[]> = {
+  full: ['penguin', 'trail', 'word'],
+  mark: ['penguin', 'trail'],
+  word: ['word'],
+  penguin: ['penguin'],
+};
+const viewBox = logoViewBox[variant];
+const [x, y, w, h] = viewBox.split(' ').map(Number);
+const clipId = `trail-${variant}`;
+---
+
+<svg class:list={['logo', className]} viewBox={viewBox} role="img" aria-label={label} fill="currentColor">
+  {drawTrail && (
+    <defs>
+      <clipPath id={clipId}>
+        <rect class="reveal" x={x} y={y} width={w} height={h} />
+      </clipPath>
+    </defs>
+  )}
+  {parts[variant].map((p) => (
+    <path
+      d={logoPaths[p]}
+      fill-rule="evenodd"
+      clip-path={drawTrail && p === 'trail' ? `url(#${clipId})` : undefined}
+    />
+  ))}
+</svg>
+
+<style>
+  .logo { display: block; width: 100%; height: auto; }
+  .reveal {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: walk 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.25s both;
+  }
+  @keyframes walk {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+</style>

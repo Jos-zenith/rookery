@@ -1,0 +1,38 @@
+---
+// A problem in the Problem Pond. One of two objects on the site that get a
+// drawn border (the other is the Passport), because people share them.
+interface Props {
+  title: string;
+  sponsor: string;
+  sponsorType: string;
+  track?: string;
+  open: boolean;
+}
+const { title, sponsor, sponsorType, track, open } = Astro.props;
+---
+
+<article class="card">
+  <div class="tags">
+    <span class="chip">Sponsor · {sponsorType}</span>
+    {track && <span class="chip">Track · {track}</span>}
+    <span class:list={['chip', { open }]}>{open ? 'Open' : 'Taken'}</span>
+  </div>
+  <h3>{title}</h3>
+  <p class="sponsor">Sponsored by {sponsor}. They’ll give your team an interview and try your prototype.</p>
+</article>
+
+<style>
+  .card {
+    border: var(--line) solid var(--ink); border-radius: var(--r-m);
+    padding: 20px; display: grid; gap: 12px; align-content: start;
+    background: var(--paper);
+  }
+  h3 { font-size: 1.15rem; }
+  .sponsor { font-size: 0.9rem; color: var(--ink-2); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 6px 10px; border-radius: 6px; background: var(--ice); color: var(--sea); white-space: nowrap;
+  }
+  .chip.open { background: transparent; border: 1.5px dashed var(--sea); }
+</style>

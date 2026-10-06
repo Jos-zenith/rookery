@@ -1,0 +1,398 @@
+---
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
+import SectionHead from '../components/SectionHead.astro';
+import MarginNote from '../components/MarginNote.astro';
+import Term from '../components/Term.astro';
+import Trail from '../components/Trail.astro';
+import Stamps from '../components/Stamps.astro';
+import WeekStrip from '../components/WeekStrip.astro';
+import ProblemCard from '../components/ProblemCard.astro';
+import { site } from '../data/site';
+import { different, outcomes, stages, levels, week, roles, glossary, problems, faq } from '../data/content';
+
+const applyOpen = Boolean(site.applyFormUrl);
+const glossaryMeaning = (term: string) => glossary.find((g) => g.term === term)?.meaning ?? '';
+---
+
+<Base>
+  <!-- Hero -->
+  <section class="hero page" aria-labelledby="hero-title">
+    <div class="hero-text">
+      <p class="label">All online · Any college · First batch of {site.batch.size}</p>
+      <h1 id="hero-title">Build something real for a real person.</h1>
+      <p class="lede">
+        With a small team, at your own pace. Walk away with proof you can show anyone, and a conversation with an
+        expert in your field.
+      </p>
+      <ul class="facts">
+        <li><Icon name="egg" size={20} /> No experience needed</li>
+        <li><Icon name="chat" size={20} /> WhatsApp and Google Meet</li>
+        <li><Icon name="clock" size={20} /> About {site.batch.hoursPerWeek} hours a week</li>
+      </ul>
+      <div class="ctas">
+        <Button href="/apply" icon="arrow-right">{applyOpen ? 'Apply for the first batch' : 'Applications open soon'}</Button>
+        <a class="trail-link" href="#journey">See how it works</a>
+      </div>
+    </div>
+    <div class="hero-mark">
+      <Logo variant="mark" drawTrail label="A line-drawn penguin walking away from its trail" />
+    </div>
+  </section>
+
+  <!-- What's different -->
+  <section class="page" aria-labelledby="different">
+    <div class="with-margin">
+      <div>
+        <SectionHead id="different" eyebrow="Why The Rookery" title="Too many good ideas never leave the notebook" />
+        <div class="prose">
+          <p>
+            Most of us learn best by building something real with other people. Here, you’ll pick a real problem, work
+            on it with a small team, and get help from people who’ve been there. And when your work is ready, you’ll be
+            introduced to professors and professionals in your field.
+          </p>
+        </div>
+      </div>
+      <MarginNote>Why the name? A rookery is where young penguins are raised.</MarginNote>
+    </div>
+    <ul class="different">
+      {different.map((d) => (
+        <li>
+          <Icon name={d.icon} size={32} stroke={1.6} />
+          <p><strong>{d.title}</strong> {d.body}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Outcomes -->
+  <section class="page" aria-labelledby="outcomes">
+    <SectionHead id="outcomes" eyebrow="What’s in it for you" title="What you walk away with" />
+    <div class="prose">
+      <p>
+        If you join as a complete beginner, this is what you can walk away with. None of it depends on how fast or how
+        smart you are. It depends on whether you show up.
+      </p>
+    </div>
+    <div class="outcomes">
+      {outcomes.map((g) => (
+        <div class="group">
+          <p class="label when">{g.when}</p>
+          <ul>
+            {g.items.map((it) => (
+              <li><strong>{it.title}.</strong> <span class="muted">{it.body}</span></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <p class="ask">
+      In return, I’m asking for about {site.batch.hoursPerWeek} hours a week: some project work, one live session and
+      one huddle call. <mark>And please, show up for your huddle.</mark> They’re counting on you, and so am I.
+    </p>
+  </section>
+
+  <!-- Journey -->
+  <section class="page" aria-labelledby="journey">
+    <div class="with-margin">
+      <div>
+        <SectionHead id="journey" eyebrow="The journey" title="Five stages, and no calendar" />
+        <div class="prose">
+          <p>
+            Everyone learns differently and no two projects are the same, so nobody gets squeezed into 8 weeks. Every
+            project goes through the same five stages, and you move on when you have the proof, not when a calendar
+            says so.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="trail-wrap"><Trail stages={stages} /></div>
+    <div class="with-margin">
+      <div class="prose">
+        <p>
+          <strong>New here?</strong> You’ll start with a short guided design sprint: a quick first loop through all five
+          stages on a small problem, just to get the feel of it.
+        </p>
+        <p>
+          <strong>Every 6–8 weeks there’s a showcase.</strong> Ready? Present. Not ready yet? Keep going with
+          your{' '}<Term meaning={glossaryMeaning('Huddle')}>huddle</Term>{' '}and
+          your{' '}<Term meaning={glossaryMeaning('Guide')}>Guide</Term>, and present at the next one.
+        </p>
+      </div>
+      <MarginNote>Nobody gets left behind for being slower. Not here.</MarginNote>
+    </div>
+  </section>
+
+  <!-- Week -->
+  <section class="page" aria-labelledby="week">
+    <SectionHead id="week" eyebrow="A normal week" title="Same days, every week" />
+    <div class="prose">
+      <p>Things happen on the same days every week, so it becomes a habit instead of something you have to remember.</p>
+    </div>
+    <div class="block"><WeekStrip days={week} /></div>
+  </section>
+
+  <!-- Levels -->
+  <section class="page" aria-labelledby="levels">
+    <SectionHead id="levels" eyebrow="How you grow" title="Levels you earn by doing the work" />
+    <div class="prose">
+      <p>
+        Levels aren’t about turning up to sessions. You move up when you’ve actually done the work, and there’s no clock
+        ticking. Each level asks one thing of you and gives you one thing back.
+      </p>
+    </div>
+    <div class="block"><Stamps levels={levels} /></div>
+  </section>
+
+  <!-- Problem Pond -->
+  <section class="page" aria-labelledby="pond">
+    <div class="with-margin">
+      <div>
+        <SectionHead id="pond" eyebrow="Problem Pond" title="Where projects come from" />
+        <div class="prose">
+          <p>
+            We collect real problems from small businesses, NGOs, local shops, clinics, professors and working
+            professionals. Every problem comes with a sponsor: the person who actually has it. So from day one you have a
+            real first user, and at the end you can say “I built this for an actual client”.
+          </p>
+          <p>You can also bring your own problem, as long as you find a real person who has it and will be your sponsor.</p>
+        </div>
+      </div>
+    </div>
+
+    {problems.length > 0 ? (
+      <div class="cards">
+        {problems.map((p) => <ProblemCard {...p} />)}
+      </div>
+    ) : (
+      <div class="pond-empty">
+        <Icon name="pond" size={40} stroke={1.5} />
+        <p>The first 3–4 sponsored problems are being lined up for the pilot. They’ll appear here.</p>
+      </div>
+    )}
+
+    <div class="sponsor">
+      <div>
+        <h3>Have a problem a student team could take on?</h3>
+        <p class="muted">
+          We’ll ask for a little of your time: an interview at the start and feedback on the prototype. You get a team
+          working on it.
+        </p>
+      </div>
+      <Button href={site.sponsorFormUrl || undefined} variant="ghost" external>
+        Bring a problem
+        <Fragment slot="pending">Sponsor form opens soon</Fragment>
+      </Button>
+    </div>
+  </section>
+
+  <!-- Passport + Fledge -->
+  <section class="page" aria-labelledby="proof">
+    <SectionHead id="proof" eyebrow="Rookery Passport" title="Proof, not certificates" />
+    <div class="prose">
+      <p>
+        Certificates are cheap. Most of us have a folder full of them. Instead, every penguin gets a Rookery Passport: a
+        public page that shows how you think and work, not just what you built. It builds itself as you go, because
+        every stage already asks for this proof.
+      </p>
+    </div>
+    <ul class="passport">
+      <li><Icon name="chat" size={26} stroke={1.6} /><span>How many people you interviewed, with short notes</span></li>
+      <li><Icon name="trail" size={26} stroke={1.6} /><span>Your problem statement, and how it changed along the way</span></li>
+      <li><Icon name="ship" size={26} stroke={1.6} /><span>Each version you shipped, and the feedback that drove it</span></li>
+      <li><Icon name="passport" size={26} stroke={1.6} /><span>A short testimonial from your sponsor or expert</span></li>
+    </ul>
+    <p class="small muted note-line">
+      Interview notes only go public with the interviewee’s permission, and their names stay out unless they say yes.
+    </p>
+
+    <div class="fledge">
+      <div class="fledge-head">
+        <Icon name="fledge" size={32} stroke={1.6} />
+        <div>
+          <h3>Fledge Review: project or startup?</h3>
+          <p class="muted small">
+            Once a team has tested with real users, a small panel sits down with them and asks one question. Both answers
+            are good.
+          </p>
+        </div>
+      </div>
+      <ul class="paths">
+        <li><b>Project path</b><span>Finish it, document it and put it on the showcase.</span></li>
+        <li><b>Venture path</b><span>Get a few real users or pilots, then build a pitch, with introductions to incubators and founders.</span></li>
+        <li><b>Stop and learn</b><span>Sometimes the idea doesn’t work. The team writes a one-page “what we learned” note, and it goes on their Passport.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Who runs it -->
+  <section class="page" aria-labelledby="team">
+    <SectionHead id="team" eyebrow="Who runs it" title="Four people for 25–30 penguins" />
+    <div class="prose">
+      <p>
+        There’s no boss here. Keepers look after the club, Guides lead each track, a huddle is your small team of 4–5,
+        and every member is a penguin. We pilot with two tracks.
+      </p>
+    </div>
+    <div class="tbl-wrap block">
+      <table>
+        <thead>
+          <tr><th scope="col">Role</th><th scope="col">How many</th><th scope="col" class="num">Hours a week</th><th scope="col">Looks after</th></tr>
+        </thead>
+        <tbody>
+          {roles.map((r) => (
+            <tr><td><strong>{r.role}</strong></td><td>{r.count}</td><td class="num">{r.hours}</td><td>{r.looksAfter}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <h3 class="gloss-title">Penguin words</h3>
+    <dl class="gloss">
+      {glossary.map((g) => (
+        <Fragment><dt>{g.term}</dt><dd>{g.meaning}</dd></Fragment>
+      ))}
+    </dl>
+  </section>
+
+  <!-- FAQ -->
+  <section class="page" aria-labelledby="faq">
+    <SectionHead id="faq" eyebrow="Questions" title="Things people ask" />
+    <div class="faq">
+      {faq.map((f) => (
+        <details>
+          <summary>{f.q}<Icon name="plus" size={20} class="faq-icon" /></summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- Letter -->
+  <section class="page" aria-labelledby="letter">
+    <div class="letter">
+      <SectionHead id="letter" eyebrow="From the founder" title="One last thing" />
+      <div class="prose">
+        <p>
+          I don’t have all of this figured out. This is a first version, and it’ll change as we learn what works. What I
+          can promise is this: I’ll show up, I’ll be honest with you, and I’ll put my network to work for everyone who
+          puts in the effort.
+        </p>
+        <p>If this sounds like your kind of place, come build with us.</p>
+        <p class="signature">— {site.founder.name}</p>
+      </div>
+      <div class="ctas">
+        <Button href="/apply" icon="arrow-right">{applyOpen ? 'Apply for the first batch' : 'Applications open soon'}</Button>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  section { padding-block: 88px 0; scroll-margin-top: 16px; }
+  .block { margin-top: 28px; }
+
+  /* hero */
+  .hero {
+    display: grid; gap: 32px; align-items: center;
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 48px 0;
+  }
+  @media (min-width: 820px) { .hero { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); padding-block: 72px 0; } }
+  .hero-text { display: grid; gap: 18px; }
+  .lede { font-size: 1.2rem; max-width: 34em; }
+  .facts { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 22px; color: var(--ink-2); font-size: var(--t-small); }
+  .facts li { display: inline-flex; align-items: center; gap: 8px; }
+  .ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 6px; }
+  .trail-link { font-weight: 600; text-decoration: underline dashed 1.5px; text-underline-offset: 5px; }
+  .trail-link:hover { text-decoration-style: solid; }
+  .hero-mark { color: var(--ink); width: 100%; max-width: 380px; justify-self: center; }
+  @media (max-width: 819px) { .hero-mark { max-width: 240px; order: -1; justify-self: start; } }
+
+  /* different */
+  .different {
+    list-style: none; margin: 32px 0 0; padding: 0;
+    display: grid; gap: 0 36px; grid-template-columns: minmax(0, 1fr);
+    border-top: var(--line) solid var(--ink);
+  }
+  @media (min-width: 720px) { .different { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .different li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 16px; padding-block: 20px; border-bottom: 1px dashed var(--pebble); }
+  .different strong { font-family: var(--f-hand); font-variation-settings: var(--infm-head); font-weight: 600; font-size: 1.1rem; }
+
+  /* outcomes */
+  .outcomes { margin-top: 28px; border-top: var(--line) solid var(--ink); }
+  .group { display: grid; gap: 8px 24px; grid-template-columns: minmax(0, 1fr); padding-block: 18px; border-bottom: 1px dashed var(--pebble); }
+  @media (min-width: 720px) { .group { grid-template-columns: 200px minmax(0, 1fr); } }
+  .when { color: var(--sea); padding-top: 4px; }
+  .group ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; max-width: var(--measure); }
+  .ask { margin-top: 24px; max-width: var(--measure); }
+
+  /* journey */
+  .trail-wrap { margin-block: 32px; }
+
+  /* pond */
+  .cards { margin-top: 28px; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); }
+  .pond-empty {
+    margin-top: 28px; padding: 24px; border: 1.5px dashed var(--pebble); border-radius: var(--r-m);
+    display: flex; gap: 18px; align-items: center; color: var(--ink-2); max-width: var(--col);
+  }
+  .sponsor {
+    margin-top: 28px; padding: 24px; border-radius: var(--r-m); background: var(--ice);
+    display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: center; justify-content: space-between;
+  }
+  .sponsor > div { display: grid; gap: 6px; flex: 1 1 320px; max-width: 56ch; }
+
+  /* passport + fledge */
+  .passport {
+    list-style: none; margin: 28px 0 0; padding: 0;
+    display: grid; gap: 14px 32px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  }
+  .passport li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 14px; align-items: start; }
+  .note-line { margin-top: 18px; max-width: var(--measure); }
+  .fledge { margin-top: 44px; display: grid; gap: 20px; }
+  .fledge-head { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 16px; max-width: var(--col); }
+  .fledge-head > div { display: grid; gap: 6px; }
+  .paths {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: 0 28px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  }
+  .paths li { display: grid; gap: 4px; align-content: start; padding-block: 14px; border-top: var(--line) solid var(--ink); }
+  .paths b { font-family: var(--f-hand); font-variation-settings: var(--infm-head); font-weight: 600; font-size: 1.1rem; }
+  .paths span { font-size: var(--t-small); color: var(--ink-2); }
+
+  /* team */
+  .tbl-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 0.97rem; }
+  th {
+    font-family: var(--f-mono); font-weight: 600; font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-2); text-align: left; padding: 8px 14px 8px 0; border-bottom: var(--line) solid var(--ink);
+  }
+  td { padding: 12px 14px 12px 0; border-bottom: 1px dashed var(--pebble); vertical-align: top; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .gloss-title { margin-top: 40px; }
+  .gloss { display: grid; grid-template-columns: minmax(0, 170px) minmax(0, 1fr); margin: 14px 0 0; max-width: var(--col); }
+  .gloss dt, .gloss dd { margin: 0; padding-block: 10px; border-bottom: 1px dashed var(--pebble); }
+  .gloss dt { font-family: var(--f-hand); font-variation-settings: var(--infm-head); font-weight: 600; padding-right: 12px; }
+  .gloss dd { font-size: var(--t-small); }
+
+  /* faq */
+  .faq { max-width: var(--col); border-top: var(--line) solid var(--ink); }
+  details { border-bottom: 1px dashed var(--pebble); }
+  summary {
+    list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    padding-block: 16px; min-height: var(--tap); font-weight: 600;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary :global(.faq-icon) { color: var(--sea); transition: transform 0.15s ease; }
+  details[open] summary :global(.faq-icon) { transform: rotate(45deg); }
+  details p { padding-bottom: 18px; max-width: var(--measure); color: var(--ink-2); }
+
+  /* letter */
+  .letter { display: grid; gap: 4px; max-width: var(--col); }
+  .signature {
+    font-family: var(--f-hand); font-variation-settings: var(--infm-note); color: var(--sea);
+    font-size: 1.4rem; font-weight: 600;
+  }
+  .letter .ctas { margin-top: 24px; }
+</style>

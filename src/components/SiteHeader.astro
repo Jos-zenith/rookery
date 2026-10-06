@@ -1,0 +1,37 @@
+---
+import Logo from './Logo.astro';
+import Button from './Button.astro';
+import { site } from '../data/site';
+
+const links = [
+  { href: '/#journey', label: 'How it works' },
+  { href: '/#pond', label: 'Problem Pond' },
+  { href: '/#faq', label: 'FAQ' },
+];
+---
+
+<header class="site-header page">
+  <a href="/" class="home" aria-label="The Rookery, home">
+    <Logo variant="word" label="The Rookery" />
+  </a>
+  <nav aria-label="Main">
+    <ul>
+      {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+    </ul>
+    <Button href="/apply" size="s" variant={site.applyFormUrl ? 'primary' : 'ghost'}>Apply</Button>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding-block: 18px;
+    border-bottom: var(--line) solid var(--ink);
+  }
+  .home { display: block; width: 156px; color: var(--ink); }
+  nav { display: flex; align-items: center; gap: 22px; }
+  ul { display: none; list-style: none; margin: 0; padding: 0; gap: 22px; }
+  ul a { color: var(--ink); text-decoration: none; font-weight: 500; font-size: 0.96rem; }
+  ul a:hover { text-decoration: underline dashed 1.5px; text-underline-offset: 5px; }
+  @media (min-width: 720px) { ul { display: flex; } }
+</style>

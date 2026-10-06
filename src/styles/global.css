@@ -1,0 +1,83 @@
+@import "./tokens.css";
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+h1, h2, h3 {
+  font-family: var(--f-hand);
+  font-variation-settings: var(--infm-head);
+  font-weight: 600;
+  line-height: 1.15;
+  text-wrap: balance;
+  margin: 0;
+}
+h1 { font-size: var(--t-h1); letter-spacing: -0.01em; line-height: 1.1; }
+h2 { font-size: var(--t-h2); }
+h3 { font-size: var(--t-h3); line-height: 1.25; }
+p { margin: 0; }
+
+a { color: var(--sea); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+a:hover { text-decoration-style: dashed; }
+
+:focus-visible { outline: 2px solid var(--sea); outline-offset: 3px; border-radius: 4px; }
+
+mark {
+  background: linear-gradient(transparent 50%, var(--mark) 50%, var(--mark) 92%, transparent 92%);
+  color: inherit;
+  padding-inline: 2px;
+}
+
+code { font-family: var(--f-mono); font-size: 0.92em; }
+
+/* layout */
+.page { max-width: var(--page); margin-inline: auto; padding-inline: var(--gutter); }
+.prose { max-width: var(--col); display: grid; gap: 16px; }
+.prose > p, .prose li { max-width: var(--measure); }
+.prose ul, .prose ol { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; }
+
+/* a section with a margin rail for notes on wide screens */
+.with-margin { display: grid; gap: 14px 40px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1000px) {
+  .with-margin { grid-template-columns: minmax(0, var(--col)) minmax(0, 1fr); }
+}
+
+/* small text roles */
+.label {
+  font-family: var(--f-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.muted { color: var(--ink-2); }
+.small { font-size: var(--t-small); }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute; left: var(--gutter); top: -100px; z-index: 10;
+  background: var(--ink); color: var(--paper); padding: 10px 14px; border-radius: var(--r-s);
+}
+.skip-link:focus { top: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

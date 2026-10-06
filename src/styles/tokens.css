@@ -1,0 +1,62 @@
+/*
+  The Rookery design tokens.
+  Field notebook: ink on paper, one line weight, Sea for working colour,
+  Beak only as a highlighter. See the website plan, sections 3 and 4.
+*/
+:root {
+  /* colour: day */
+  --paper: #F8F4EB;   /* page ground, from the logo */
+  --paper-2: #EFE8DA; /* sunken / raised surface */
+  --ink: #191B1E;     /* text and the logo line */
+  --ink-2: #4B4F55;   /* secondary text */
+  --pebble: #CDC6B6;  /* dashed rules, empty states */
+  --sea: #235A7E;     /* links, buttons, progress, margin notes */
+  --ice: #DCE8EE;     /* chips, hover fills */
+  --beak: #F2B33D;    /* highlight only, never text */
+  --mark: #F6CB6B;    /* highlighter behind text */
+  --on-beak: #191B1E;
+  --error: #A63D2A;   /* forms only */
+
+  /* type */
+  --f-hand: "Shantell Sans Variable", "Comic Neue", ui-rounded, "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible Next Variable", "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "Atkinson Hyperlegible Mono Variable", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  --t-label: 0.78rem;
+  --t-small: 0.9375rem;
+  --t-body: clamp(1.0625rem, 1rem + 0.25vw, 1.125rem);
+  --t-h3: 1.25rem;
+  --t-h2: clamp(1.625rem, 1.3rem + 1.4vw, 2rem);
+  --t-h1: clamp(2.125rem, 1.4rem + 3vw, 3.25rem);
+
+  /* the Informal axis: tidy for headings, scribbled for notes */
+  --infm-head: "INFM" 15;
+  --infm-note: "INFM" 85;
+
+  /* line, shape, layout */
+  --line: 1.75px;
+  --r-s: 8px;
+  --r-m: 14px;
+  --r-pill: 999px;
+  --measure: 65ch;
+  --col: 680px;
+  --page: 1080px;
+  --gutter: 20px;
+  --tap: 48px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #111518;
+    --paper-2: #192026;
+    --ink: #EDE7D9;
+    --ink-2: #A8ACAE;
+    --pebble: #333B42;
+    --sea: #8CC0E0;
+    --ice: #1B2B36;
+    --beak: #F2B33D;
+    --mark: #5C4A1E;
+    --error: #E58A75;
+    color-scheme: dark;
+  }
+}
