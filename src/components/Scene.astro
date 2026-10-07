@@ -1,0 +1,75 @@
+---
+// Section scenes starring the logo penguin (see PenguinDefs.astro).
+// Every penguin is the original traced drawing; scenes only place, flip,
+// scale and tilt it, and add a few lines of world around it.
+type Name = 'huddle' | 'pond' | 'fledge' | 'stamp';
+interface Props {
+  name: Name;
+  label?: string;
+  class?: string;
+}
+const { name, label, class: className } = Astro.props;
+
+const views: Record<Name, string> = {
+  huddle: '0 0 320 210',
+  pond: '0 0 320 200',
+  fledge: '0 0 360 220',
+  stamp: '0 0 120 120',
+};
+---
+
+<svg
+  class:list={['scene', name, className]}
+  viewBox={views[name]}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+>
+  {name === 'huddle' && (
+    <Fragment>
+      <path class="line" d="M20 192c70 8 210 8 280 0" />
+      <use href="#pg" x="92" y="4" width="150" height="150" />
+      <use href="#pg-left" x="186" y="42" width="128" height="128" />
+      <use href="#pg" x="6" y="44" width="128" height="128" />
+      <use href="#pg-left" x="118" y="102" width="84" height="84" />
+    </Fragment>
+  )}
+
+  {name === 'pond' && (
+    <Fragment>
+      <path class="line" d="M118 20c-6 9-9 14.5-9 18.5a9 9 0 0 0 18 0c0-4-3-9.5-9-18.5z" />
+      <ellipse class="line" cx="118" cy="148" rx="104" ry="30" />
+      <ellipse class="line" cx="118" cy="148" rx="58" ry="15" />
+      <ellipse class="line" cx="118" cy="148" rx="20" ry="5" />
+      <use href="#pg-left" x="196" y="40" width="130" height="130" />
+    </Fragment>
+  )}
+
+  {name === 'fledge' && (
+    <Fragment>
+      <path class="line dash" d="M20 150c30-28 70-40 118-30" />
+      <g transform="rotate(14 190 110)">
+        <use href="#pg" x="120" y="30" width="150" height="150" />
+      </g>
+      <path class="line" d="M214 176c12 0 12-6 24-6s12 6 24 6 12-6 24-6 12 6 24 6 12-6 24-6 12 6 24 6" />
+      <path class="line" d="M236 196c10 0 10-5 20-5s10 5 20 5 10-5 20-5 10 5 20 5 10-5 20-5" />
+      <path class="line" d="M258 212c8 0 8-4 16-4s8 4 16 4 8-4 16-4 8 4 16 4" />
+    </Fragment>
+  )}
+
+  {name === 'stamp' && (
+    <Fragment>
+      <g transform="rotate(-8 60 60)">
+        <circle class="line" cx="60" cy="60" r="54" />
+        <circle class="line dash" cx="60" cy="60" r="45" />
+      </g>
+      <use href="#pg" x="22" y="20" width="76" height="76" />
+    </Fragment>
+  )}
+</svg>
+
+<style>
+  .scene { display: block; width: 100%; height: auto; overflow: visible; color: var(--ink); fill: var(--paper); }
+  .line { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .dash { stroke-dasharray: 5 7; }
+</style>

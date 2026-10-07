@@ -13,7 +13,7 @@ const { stages, current } = Astro.props;
 const state = (i: number) => (current === undefined ? '' : i < current ? 'done' : i === current ? 'now' : '');
 ---
 
-<ol class="trail">
+<ol class="trail" style={`--n: ${stages.length}`}>
   {stages.map((s, i) => (
     <li class:list={[state(i), { last: i === stages.length - 1 }]}>
       <span class="dot"><Icon name={s.icon} size={28} stroke={1.6} /></span>

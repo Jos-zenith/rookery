@@ -1,10 +1,10 @@
 ---
 import '@fontsource-variable/shantell-sans/infm.css';
-import '@fontsource-variable/atkinson-hyperlegible-next';
-import '@fontsource-variable/atkinson-hyperlegible-mono';
+import '@fontsource-variable/dm-sans';
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import PenguinDefs from '../components/PenguinDefs.astro';
 import { site } from '../data/site';
 
 interface Props {
@@ -31,7 +31,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : un
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="theme-color" content="#F8F4EB" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#FAF6EE" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#111518" media="(prefers-color-scheme: dark)" />
 
     <meta property="og:type" content="website" />
@@ -47,6 +47,13 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : un
     <meta name="generator" content={Astro.generator} />
   </head>
   <body>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <filter id="wobble" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="2" seed="7" />
+        <feDisplacementMap in="SourceGraphic" scale="2.4" />
+      </filter>
+    </svg>
+    <PenguinDefs />
     <a class="skip-link" href="#main">Skip to content</a>
     <SiteHeader />
     <main id="main">

@@ -4,17 +4,19 @@
 import { logoPaths, logoViewBox } from '../lib/logo-paths';
 
 type Variant = 'full' | 'mark' | 'word' | 'penguin';
-type Part = keyof typeof logoPaths;
+type Part = Exclude<keyof typeof logoPaths, 'body'>;
 
 interface Props {
   variant?: Variant;
   label?: string;
   /** Draw the trail in once on load (the site's one signature animation). */
   drawTrail?: boolean;
+  /** Give the penguin a solid body (colour from --logo-body, default paper). */
+  filled?: boolean;
   class?: string;
 }
 
-const { variant = 'full', label = 'The Rookery', drawTrail = false, class: className } = Astro.props;
+const { variant = 'full', label = 'The Rookery', drawTrail = false, filled = false, class: className } = Astro.props;
 
 const parts: Record<Variant, Part[]> = {
   full: ['penguin', 'trail', 'word'],
@@ -35,6 +37,7 @@ const clipId = `trail-${variant}`;
       </clipPath>
     </defs>
   )}
+  {filled && parts[variant].includes('penguin') && <path class="body" d={logoPaths.body} />}
   {parts[variant].map((p) => (
     <path
       d={logoPaths[p]}
@@ -46,6 +49,7 @@ const clipId = `trail-${variant}`;
 
 <style>
   .logo { display: block; width: 100%; height: auto; }
+  .body { fill: var(--logo-body, var(--paper)); }
   .reveal {
     transform-box: fill-box;
     transform-origin: left center;

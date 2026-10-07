@@ -19,18 +19,21 @@ Fill these in; until then the site shows "opens soon" states instead of broken l
 | --- | --- |
 | Application Google Form | `applyFormUrl` in `src/data/site.ts` |
 | Sponsor Google Form | `sponsorFormUrl` in `src/data/site.ts` |
+| "Suggest a Guide" form | `guideFormUrl` in `src/data/site.ts` |
+| Partner / CSR form | `partnerFormUrl` in `src/data/site.ts` |
+| Colleges your penguins come from (shows a row under the hero) | `colleges` in `src/data/content.ts` |
+| Co-Keeper's name | `team` in `src/data/content.ts` |
 | Contact email, Instagram, LinkedIn | `src/data/site.ts` |
 | Domain (makes the WhatsApp preview image work) | `site` in `astro.config.mjs` |
-| Confirm the five stage names | `stages` in `src/data/content.ts` |
 | First 3–4 sponsored problems | `problems` in `src/data/content.ts` |
 
 ## Where things live
 
-- `src/data/` — all the words: outcomes, stages, levels, week, roles, glossary, FAQ, problems. Edit here, not in the pages.
+- `src/data/` — all the words: lifecycle stages, onboarding, tracks, outcomes, week, levels, Guide perks, problems. Edit here, not in the pages. Keep captions to 2–5 words; the drawings carry the meaning.
 - `src/styles/tokens.css` — colours, fonts, sizes. Every colour has a day and a night value.
-- `src/components/` — Logo, Icon, Button, Trail (five stages), Stamps (levels), WeekStrip, ProblemCard, MarginNote, Term (glossary tooltip).
+- `src/components/` — Logo, Icon, Button, Trail (lifecycle), Stamps (levels), WeekStrip, ProblemCard.
 - `src/lib/logo-paths.ts` — the logo traced to vector paths. Inlined so it follows the text colour.
-- `src/lib/icons.ts` — everyday icons plus the club icons (egg, huddle, pond, passport, fledge, ship, trail, pebble).
+- `src/lib/icons.ts` — everyday icons, the lifecycle (define, prototype, test, ship, showcase), tracks (ai, cad, iot) and club icons.
 - `public/brand/` — logo SVGs for use elsewhere (slides, social): full, reversed, mark, wordmark, penguin, penguin-512.png.
 - `public/og.png` — the link preview image (1200 × 630).
 
@@ -40,4 +43,4 @@ Fill these in; until then the site shows "opens soon" states instead of broken l
 - `/apply` — what happens after you apply, and the form link
 - `/404`
 
-Next up, per the plan: `/pond` and `/how`, then `/showcase` after the first showcase.
+Next up: `/pond` once sponsors are in, then `/showcase` at the end of the 8 weeks.

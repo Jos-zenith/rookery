@@ -1,48 +1,62 @@
 /*
   The Rookery design tokens.
-  Field notebook: ink on paper, one line weight, Sea for working colour,
-  Beak only as a highlighter. See the website plan, sections 3 and 4.
+  Cream paper and near-black ink from the logo. One accent (Sea) for buttons
+  and links. Soft tints give each card its own pop; text stays ink.
 */
 :root {
   /* colour: day */
-  --paper: #F8F4EB;   /* page ground, from the logo */
-  --paper-2: #EFE8DA; /* sunken / raised surface */
+  --paper: #FAF6EE;   /* the logo's cream */
+  --paper-2: #F1EBDF; /* sunken / raised surface */
   --ink: #191B1E;     /* text and the logo line */
   --ink-2: #4B4F55;   /* secondary text */
-  --pebble: #CDC6B6;  /* dashed rules, empty states */
-  --sea: #235A7E;     /* links, buttons, progress, margin notes */
-  --ice: #DCE8EE;     /* chips, hover fills */
-  --beak: #F2B33D;    /* highlight only, never text */
-  --mark: #F6CB6B;    /* highlighter behind text */
+  --pebble: #CDC6B6;  /* dashed rules, ahead-of-you trail */
+  --sea: #235A7E;     /* the one accent: buttons, links, the walked trail */
+  --beak: #F2B33D;    /* small pop: the Showcase stop, highlighter */
+  --mark: #F6CB6B;
   --on-beak: #191B1E;
-  --error: #A63D2A;   /* forms only */
+  --error: #A63D2A;
 
-  /* type */
+  /* card tints */
+  --tint-blue: #DCE8EE;
+  --tint-peach: #F8E2D0;
+  --tint-mint: #DCEDE1;
+  --ice: var(--tint-blue);
+
+  /* full-bleed sea band (closing call to action) */
+  --band: #1F4F6E;
+  --on-band: #FAF6EE;
+
+  /* type: hand-lettered for headings, labels and notes; clean sans for reading */
   --f-hand: "Shantell Sans Variable", "Comic Neue", ui-rounded, "Segoe UI", system-ui, sans-serif;
-  --f-body: "Atkinson Hyperlegible Next Variable", "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --f-mono: "Atkinson Hyperlegible Mono Variable", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --f-body: "DM Sans Variable", "DM Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-label: var(--f-hand);
 
-  --t-label: 0.78rem;
+  --t-label: 0.95rem;
   --t-small: 0.9375rem;
   --t-body: clamp(1.0625rem, 1rem + 0.25vw, 1.125rem);
   --t-h3: 1.25rem;
-  --t-h2: clamp(1.625rem, 1.3rem + 1.4vw, 2rem);
-  --t-h1: clamp(2.125rem, 1.4rem + 3vw, 3.25rem);
+  --t-h2: clamp(1.75rem, 1.35rem + 1.6vw, 2.25rem);
+  --t-h1: clamp(2.6rem, 1.4rem + 4.6vw, 5.2rem);
 
-  /* the Informal axis: tidy for headings, scribbled for notes */
   --infm-head: "INFM" 15;
   --infm-note: "INFM" 85;
 
   /* line, shape, layout */
   --line: 1.75px;
   --r-s: 8px;
-  --r-m: 14px;
+  --r-m: 18px;
   --r-pill: 999px;
-  --measure: 65ch;
-  --col: 680px;
-  --page: 1080px;
-  --gutter: 20px;
+  --measure: 60ch;
+  --col: 720px;   /* reading width for running text */
+  --page: 1440px; /* the site uses the full screen up to this */
+  --gutter: clamp(20px, 4vw, 56px);
   --tap: 48px;
+  --rail: 36px;   /* the trail's lane, left of the content */
+  --rail-gap: 16px;
+}
+
+@media (min-width: 760px) {
+  :root { --rail: 64px; --rail-gap: 40px; }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -51,12 +65,16 @@
     --paper-2: #192026;
     --ink: #EDE7D9;
     --ink-2: #A8ACAE;
-    --pebble: #333B42;
+    --pebble: #3A424A;
     --sea: #8CC0E0;
-    --ice: #1B2B36;
     --beak: #F2B33D;
     --mark: #5C4A1E;
     --error: #E58A75;
+    --tint-blue: #1B2B36;
+    --tint-peach: #33261E;
+    --tint-mint: #1C2C24;
+    --band: #173A51;
+    --on-band: #F4EEE2;
     color-scheme: dark;
   }
 }

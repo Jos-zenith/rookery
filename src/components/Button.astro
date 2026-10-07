@@ -6,7 +6,7 @@ import type { IconName } from '../lib/icons';
 
 interface Props {
   href?: string;
-  variant?: 'primary' | 'ghost';
+  variant?: 'primary' | 'ghost' | 'light';
   size?: 'm' | 's';
   external?: boolean;
   icon?: IconName;
@@ -45,10 +45,13 @@ const trailingIcon: IconName | undefined = icon ?? (external ? 'arrow-up-right' 
     transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   }
   .btn.s { min-height: 40px; padding: 9px 16px; font-size: 0.94rem; }
-  .primary { background: var(--ink); color: var(--paper); }
-  .primary:hover { background: var(--sea); border-color: var(--sea); }
+  .primary { background: var(--sea); border-color: var(--sea); color: var(--paper); }
+  .primary:hover { background: var(--ink); border-color: var(--ink); }
   .ghost { background: transparent; color: var(--ink); }
   .ghost:hover { background: var(--ice); }
+  /* on the sea band */
+  .light { background: var(--on-band); border-color: var(--on-band); color: var(--band); }
+  .light:hover { background: transparent; color: var(--on-band); }
   a.btn:active { transform: translateY(1px); }
   .pending {
     background: transparent; color: var(--ink-2);

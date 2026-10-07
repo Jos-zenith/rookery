@@ -4,22 +4,25 @@ interface Props {
   levels: { code: string; name: string; unlock: string }[];
   /** Levels after this index look locked. Omit to show all earned. */
   earned?: number;
+  /** Small stamps without captions, e.g. inside a Passport card. */
+  small?: boolean;
 }
-const { levels, earned } = Astro.props;
+const { levels, earned, small = false } = Astro.props;
 const angles = [-6, 4, -3, 5, -2];
 ---
 
-<ol class="stamps">
+<ol class:list={['stamps', { small }]}>
   {levels.map((l, i) => (
     <li>
       <div
         class:list={['stamp', { locked: earned !== undefined && i > earned }]}
         style={`--tilt: ${angles[i % angles.length]}deg`}
+        title={small ? `${l.code} ${l.name}` : undefined}
       >
         <strong>{l.code}</strong>
-        <span>{l.name}</span>
+        {!small && <span>{l.name}</span>}
       </div>
-      <small>{l.unlock}</small>
+      {!small && <small>{l.unlock}</small>}
     </li>
   ))}
 </ol>
@@ -30,18 +33,22 @@ const angles = [-6, 4, -3, 5, -2];
     display: grid; gap: 28px 12px;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 128px), 1fr));
   }
+  .stamps.small { display: flex; flex-wrap: wrap; gap: 6px; }
   li { display: grid; gap: 12px; justify-items: center; text-align: center; }
   .stamp {
-    width: 104px; height: 104px; border-radius: 50%;
+    --size: 104px;
+    width: var(--size); height: var(--size); border-radius: 50%;
     border: 2px solid var(--sea); outline: 1.5px dashed var(--sea); outline-offset: -9px;
     display: grid; place-content: center; text-align: center; color: var(--sea);
-    font-family: var(--f-mono); text-transform: uppercase; letter-spacing: 0.1em;
+    font-family: var(--f-hand); text-transform: uppercase; letter-spacing: 0.08em;
     transform: rotate(var(--tilt));
     transition: transform 0.15s ease;
   }
+  .small .stamp { --size: 46px; outline-offset: -5px; border-width: 1.5px; outline-width: 1px; }
   li:hover .stamp { transform: rotate(0deg) scale(0.96); }
-  .stamp strong { font-size: 1.45rem; line-height: 1; letter-spacing: 0.04em; }
-  .stamp span { font-size: 0.66rem; margin-top: 4px; }
+  .stamp strong { font-size: 1.45rem; line-height: 1; letter-spacing: 0.02em; }
+  .small .stamp strong { font-size: 0.9rem; }
+  .stamp span { font-size: 0.7rem; margin-top: 4px; }
   .stamp.locked { border-color: var(--pebble); outline-color: var(--pebble); color: var(--ink-2); }
   small { font-size: 0.86rem; color: var(--ink-2); line-height: 1.3; }
 </style>

@@ -1,0 +1,21 @@
+---
+// The logo penguin as a reusable symbol: a solid body (so penguins can stand
+// in front of each other) under the original hand-drawn outline.
+// Body colour comes from `fill` on the <use>; the line from `color`.
+import { logoPaths, logoViewBox } from '../lib/logo-paths';
+---
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="pg" viewBox={logoViewBox.penguin}>
+      <path d={logoPaths.body} />
+      <path d={logoPaths.penguin} fill="currentColor" fill-rule="evenodd" />
+    </symbol>
+    <symbol id="pg-left" viewBox={logoViewBox.penguin}>
+      <g transform="translate(2908 0) scale(-1 1)">
+        <path d={logoPaths.body} />
+        <path d={logoPaths.penguin} fill="currentColor" fill-rule="evenodd" />
+      </g>
+    </symbol>
+  </defs>
+</svg>

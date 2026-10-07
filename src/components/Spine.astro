@@ -1,0 +1,215 @@
+---
+// The logo's trail, run down the page as a spine. It curves through every
+// element marked [data-node] (section markers and the five stages). As the
+// visitor scrolls, the penguin walks it: dashed ahead, solid behind.
+// The penguin eases toward its spot, waddles in step with the distance it
+// covers, leans into the walk and turns round when the trail does.
+---
+
+<div class="spine-wrap" data-spine>
+  <svg class="spine" aria-hidden="true" focusable="false">
+    <path class="ahead" />
+    <path class="walked" />
+  </svg>
+  <slot />
+  <svg class="walker-layer" aria-hidden="true" focusable="false">
+    <g class="walker">
+      <ellipse class="shadow" cx="0" cy="0" rx="17" ry="4" />
+      <g class="body">
+        <use href="#pg" x="-36" y="-70" width="72" height="72" />
+      </g>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .spine-wrap { position: relative; }
+  .spine, .walker-layer {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    overflow: visible; pointer-events: none;
+  }
+  .spine { z-index: 0; }
+  .walker-layer { z-index: 3; }
+  .ahead { fill: none; stroke: var(--ink-2); stroke-width: 1.75; stroke-dasharray: 5 7; stroke-linecap: round; opacity: 0.7; }
+  .walked { fill: none; stroke: var(--sea); stroke-width: 2.25; stroke-linecap: round; stroke-dasharray: 0 1; }
+  .walker { opacity: 0; transition: opacity 0.4s ease; }
+  .walker.ready { opacity: 1; }
+  .body { color: var(--ink); fill: var(--paper); }
+  .shadow { fill: var(--ink); opacity: 0.12; }
+</style>
+
+<script>
+  type Pt = { x: number; y: number };
+
+  const wrap = document.querySelector<HTMLElement>('[data-spine]');
+  if (wrap) {
+    const spine = wrap.querySelector<SVGSVGElement>('svg.spine')!;
+    const layer = wrap.querySelector<SVGSVGElement>('svg.walker-layer')!;
+    const ahead = wrap.querySelector<SVGPathElement>('.ahead')!;
+    const walked = wrap.querySelector<SVGPathElement>('.walked')!;
+    const walker = wrap.querySelector<SVGGElement>('.walker')!;
+    const body = wrap.querySelector<SVGGElement>('.body')!;
+    const shadow = wrap.querySelector<SVGEllipseElement>('.shadow')!;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    let len = 0;
+    let cur = 0; // where the penguin is, as a length along the trail
+    let target = 0; // where the scroll says it should be
+    let travelled = 0; // total distance walked, drives the waddle
+    let face = 1; // 1 = facing right, -1 = left; eased through 0 when turning
+    let faceTo = 1;
+    let stride = 0; // 0 = standing still, 1 = full waddle
+    let running = false;
+    let placed = false;
+
+    const build = () => {
+      const box = wrap.getBoundingClientRect();
+      const vb = `0 0 ${box.width} ${box.height}`;
+      spine.setAttribute('viewBox', vb);
+      layer.setAttribute('viewBox', vb);
+      const pts: Pt[] = [...wrap.querySelectorAll<HTMLElement>('[data-node]')]
+        .filter((n) => n.offsetParent !== null)
+        .map((n) => {
+          const r = n.getBoundingClientRect();
+          return { x: r.left + r.width / 2 - box.left, y: r.top + r.height / 2 - box.top };
+        });
+      if (pts.length < 2) return;
+
+      // Mostly-vertical legs meander sideways like the logo's trail; mostly-
+      // horizontal legs (the stages crossing the page) flow as an S; a leg that
+      // heads back left swings round smoothly. Every leg keeps y increasing,
+      // so each scroll position maps to exactly one point on the trail.
+      const sway = (window.innerWidth >= 760 ? 18 : 7) / 0.75;
+      let d = `M${pts[0].x} ${pts[0].y}`;
+      let prev: Pt = { x: pts[0].x, y: pts[0].y - 1 };
+      for (let i = 1; i < pts.length; i++) {
+        const a = pts[i - 1];
+        const b = pts[i];
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        let c1: Pt;
+        let c2: Pt;
+        if (dx < -dy) {
+          const tx = a.x - prev.x;
+          const ty = a.y - prev.y;
+          const tl = Math.hypot(tx, ty) || 1;
+          c1 = { x: a.x + (tx / tl) * dy * 0.6, y: a.y + Math.max(0, (ty / tl) * dy * 0.6) };
+          c2 = { x: b.x, y: b.y - dy * 0.5 };
+        } else if (dx > dy) {
+          const n = pts[i + 1];
+          const turnsBack = n && n.x - b.x < -(n.y - b.y);
+          c1 = { x: a.x + dx * (turnsBack ? 0.85 : 0.55), y: a.y };
+          c2 = turnsBack ? { x: b.x, y: b.y - dy * 0.55 } : { x: b.x - dx * 0.5, y: b.y };
+        } else {
+          const s = i % 2 ? 1 : -1;
+          c1 = { x: a.x + s * sway, y: a.y + dy * 0.35 };
+          c2 = { x: b.x + s * sway, y: b.y - dy * 0.35 };
+        }
+        d += ` C${c1.x} ${c1.y} ${c2.x} ${c2.y} ${b.x} ${b.y}`;
+        prev = c2;
+      }
+      ahead.setAttribute('d', d);
+      walked.setAttribute('d', d);
+      len = ahead.getTotalLength();
+
+      // smaller penguin on phones
+      const size = window.innerWidth >= 760 ? 72 : 50;
+      const use = body.querySelector('use')!;
+      use.setAttribute('width', String(size));
+      use.setAttribute('height', String(size));
+      use.setAttribute('x', String(-size / 2));
+      use.setAttribute('y', String(-size * 0.97));
+      shadow.setAttribute('rx', String(size * 0.24));
+      shadow.setAttribute('ry', String(size * 0.055));
+
+      findTarget();
+      if (!placed) {
+        // first time: stand where the reader is, no walk from the top
+        cur = target;
+        placed = true;
+        draw(0);
+        requestAnimationFrame(() => walker.classList.add('ready'));
+      }
+      kick();
+    };
+
+    // the point on the trail level with the middle of the screen
+    const findTarget = () => {
+      if (!len) return;
+      const y = window.innerHeight * 0.55 - wrap.getBoundingClientRect().top;
+      let lo = 0;
+      let hi = len;
+      for (let k = 0; k < 22; k++) {
+        const mid = (lo + hi) / 2;
+        if (ahead.getPointAtLength(mid).y < y) lo = mid;
+        else hi = mid;
+      }
+      target = lo;
+    };
+
+    const draw = (step: number) => {
+      const p = ahead.getPointAtLength(cur);
+      const q = ahead.getPointAtLength(Math.min(len, cur + 2));
+      const r = ahead.getPointAtLength(Math.max(0, cur - 2));
+
+      // face the way we are actually moving along the trail
+      // (on the straight-down lane, turn back to face the page's content)
+      if (Math.abs(step) > 0.25) {
+        const dirX = (q.x - r.x) * Math.sign(step);
+        if (Math.abs(dirX) > 1.2) faceTo = dirX > 0 ? 1 : -1;
+        else if (Math.abs(q.x - r.x) < 0.6) faceTo = 1;
+      }
+      face += (faceTo - face) * 0.18;
+      const flip = Math.abs(face) < 0.08 ? 0.08 * Math.sign(face || 1) : face;
+
+      const speed = Math.min(Math.abs(step), 10) / 10;
+      stride += (speed - stride) * 0.15;
+      const phase = travelled / 11;
+      const tilt = Math.sin(phase) * 8 * stride + faceTo * 4 * stride; // waddle + lean forward
+      const bob = -Math.abs(Math.sin(phase)) * 3.5 * stride;
+
+      walker.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})`);
+      body.setAttribute('transform', `translate(0 ${bob.toFixed(2)}) rotate(${tilt.toFixed(2)}) scale(${flip.toFixed(3)} 1)`);
+      shadow.setAttribute('transform', `scale(${(1 - Math.abs(bob) * 0.04).toFixed(3)} 1)`);
+      walked.style.strokeDasharray = `${cur} ${len}`;
+    };
+
+    const tick = () => {
+      const diff = target - cur;
+      let step: number;
+      if (reduce.matches) {
+        step = diff;
+      } else {
+        // ease in, but walk no faster than a brisk waddle
+        step = Math.sign(diff) * Math.min(Math.abs(diff) * 0.1, 26);
+        if (Math.abs(diff) < 0.4) step = diff;
+      }
+      cur += step;
+      travelled += Math.abs(step);
+      if (reduce.matches) {
+        stride = 0;
+        face = faceTo;
+      }
+      draw(step);
+      const settling = Math.abs(target - cur) > 0.3 || Math.abs(faceTo - face) > 0.01 || stride > 0.01;
+      if (settling) requestAnimationFrame(tick);
+      else running = false;
+    };
+
+    const kick = () => {
+      if (!running && len) {
+        running = true;
+        requestAnimationFrame(tick);
+      }
+    };
+
+    const onScroll = () => {
+      findTarget();
+      kick();
+    };
+
+    new ResizeObserver(build).observe(wrap);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', build);
+  }
+</script>

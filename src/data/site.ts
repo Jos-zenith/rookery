@@ -6,7 +6,7 @@ export const site = {
   tagline: 'Start small, keep moving.',
   method: 'Design-driven problem solving',
   description:
-    'Real problems for real people. Student builders in small teams take a sponsor’s problem from Define to Showcase, in AI, CAD or IoT.',
+    'Real problems for real people. Student builders in small teams take a sponsor’s problem from Define to Showcase, in 8 weeks.',
 
   // TODO: the Google Form for student applications. While empty, the site
   // says "Applications open soon" instead of showing an Apply link.
@@ -17,6 +17,9 @@ export const site = {
 
   // TODO: the form for suggesting a friend as a Guide.
   guideFormUrl: '',
+
+  // TODO: the form for CSR teams and partners. Falls back to contactEmail.
+  partnerFormUrl: '',
 
   // TODO: a contact address shown in the footer.
   contactEmail: '',
